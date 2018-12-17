@@ -1,0 +1,7 @@
+# WinDivert 1.4.3
+
+Includes bundled sources and precompiled driver files for WinDivert 1.4.3-B.
+Static linking by default, to dynamically link instead, set WINDIVERT_DYNAMIC to some value.
+If WINDIVERT_DYNAMIC is not present, windivert is staticly linked.
+
+This library is a no-op on non-windows platforms.

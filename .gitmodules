@@ -1,0 +1,3 @@
+[submodule "Divert"]
+	path = Divert
+	url = https://github.com/basil00/Divert
