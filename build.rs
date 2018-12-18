@@ -26,7 +26,7 @@ fn build() {
         .include("vendored/divert/dll/")
         .file("vendored/divert/dll/windivert.c")
         .warnings(false);
-
+        
     cfg.compile("windivert");
 
     set_link_directives();
@@ -35,10 +35,7 @@ fn build() {
 fn set_link_directives() {
     // required by windivert
     println!("cargo:rustc-link-lib=advapi32");
-    println!("cargo:rustc-link-lib=setupapi");
-    println!("cargo:rustc-link-lib=user32");
     println!("cargo:rustc-link-lib=kernel32");
-    println!("cargo:rustc-link-lib=ws2_32");
 
     // statically link the vendored windivert
     println!("cargo:rustc-link-lib=static=windivert");

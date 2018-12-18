@@ -68,7 +68,6 @@ ENUM!{ enum WINDIVERT_PARAM {
 
 pub const WINDIVERT_PARAM_MAX: WINDIVERT_PARAM = WINDIVERT_PARAM_QUEUE_SIZE;
 
-#[link(name = "windivert")]
 extern "C" {
     pub fn WinDivertOpen(filter: *const c_char, layer: WINDIVERT_LAYER, priority: INT16, flags: UINT64) -> HANDLE;
     pub fn WinDivertRecv(handle: HANDLE, pPacket: PVOID, packetLen: UINT, pAddr: PWINDIVERT_ADDRESS, readLen: *mut UINT) -> BOOL;
@@ -250,12 +249,11 @@ pub const WINDIVERT_HELPER_NO_ICMPV6_CHECKSUM: UINT64 = 4;
 pub const WINDIVERT_HELPER_NO_TCP_CHECKSUM: UINT64 = 8;
 pub const WINDIVERT_HELPER_NO_UDP_CHECKSUM: UINT64 = 16;
 
-#[link(name = "windivert")]
 extern "C" {
     pub fn WinDivertHelperParsePacket(pPacket: PVOID, packetLen: UINT, ppIpHdr: *mut PWINDIVERT_IPHDR, ppIpv6Hdr: *mut PWINDIVERT_IPV6HDR, ppIcmpHdr: *mut PWINDIVERT_ICMPHDR, ppIcmpv6Hdr: *mut PWINDIVERT_ICMPV6HDR, ppTcpHdr: *mut PWINDIVERT_TCPHDR, ppUdpHdr: *mut PWINDIVERT_UDPHDR, ppData: *mut PVOID, pDataLen: *mut UINT) -> BOOL;
     pub fn WinDivertHelperParseIPv4Address(addrStr: *const c_char, pAddr: *mut UINT32) -> BOOL;
     pub fn WinDivertHelperParseIPv6Address(addrStr: *const c_char, pAddr: *mut UINT32) -> BOOL;
     pub fn WinDivertHelperCalcChecksums(pPacket: PVOID, packetLen: UINT, pAddr: PWINDIVERT_ADDRESS, flags: UINT64) -> UINT;
-    pub fn WinDivertHelperCheckFilter(filter: *const c_char, layer: WINDIVERT_LAYER, errorStr: *mut *mut c_char, errorPos: *mut UINT) -> BOOL;
-    pub fn WinDivertHelperEvalFilter(filter: *const c_char, layer: WINDIVERT_LAYER, pPacket: PVOID, packetLen: UINT, pAddr: PWINDIVERT_ADDRESS);
+    pub fn WinDivertHelperCheckFilter(filter: *const c_char, layer: WINDIVERT_LAYER, errorStr: *mut *const c_char, errorPos: *mut UINT) -> BOOL;
+    pub fn WinDivertHelperEvalFilter(filter: *const c_char, layer: WINDIVERT_LAYER, pPacket: PVOID, packetLen: UINT, pAddr: PWINDIVERT_ADDRESS) -> BOOL;
 }

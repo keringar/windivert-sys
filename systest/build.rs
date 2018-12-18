@@ -1,4 +1,11 @@
 fn main() {
+    let target = std::env::var("TARGET").unwrap();
+    let target: Vec<_> = target.split('-').collect();
+    let is_msvc = match target.get(3) {
+        Some(&"msvc") => true,
+        _ => false,
+    };
+
     let mut cfg = ctest::TestGenerator::new();
 
     // Include the header files where the C APIs are defined
@@ -19,8 +26,14 @@ fn main() {
         field_name.contains("bitfield")
     });
 
-    // Uses nonstandard bitfields, disable warning C4214
-    cfg.flag("/wd4214");
+    cfg.fn_cname(|rust, _| {
+        format!("{}", rust)
+    });
+
+    if is_msvc {
+        // Library uses nonstandard bitfields, disable warning C4214
+        cfg.flag("/wd4214");
+    };
 
     // Our enums values are always positive, so don't worry about signedness
     cfg.skip_signededness(|ty_name| {
