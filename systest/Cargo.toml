@@ -1,0 +1,15 @@
+[package]
+name = "systest"
+version = "0.1.0"
+authors = ["Warren <me@warrenhu.com>"]
+edition = "2018"
+
+[build-dependencies]
+ctest = "0.2"
+
+[dependencies]
+windivert-sys = { path = ".." }
+
+[target.'cfg(windows)'.dependencies.winapi]
+version = "0.3.6"
+features = ["ntdef", "minwindef", "basetsd", "minwinbase"]

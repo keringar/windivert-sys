@@ -1,3 +1,6 @@
 /target
 **/*.rs.bk
 Cargo.lock
+
+/systest/target
+/systest/Cargo.lock

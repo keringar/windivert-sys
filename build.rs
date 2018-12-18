@@ -1,11 +1,8 @@
 use std::path::PathBuf;
-use std::fs;
-use std::io::prelude::*;
 use std::env;
 
 fn main() {
     println!("cargo:rerun-if-changed=build.rs");
-    println!("cargo:rerun-if-env-changed=WINDIVERT_DYNAMIC");
 
     let target = env::var("TARGET").unwrap();
     let target: Vec<_> = target.split('-').collect();
@@ -22,28 +19,27 @@ fn build() {
     println!("cargo:include={}", include.display());
     println!("cargo:static=1");
 
-    // copy over all the includes
-    fs::create_dir_all(include.join("windivert")).unwrap();
-    fs::copy("", include.join("windivert/");
-
     // we only need to build the DLL portion
+    let mut cfg = cc::Build::new();
+    cfg.out_dir(&build)
+        .include("vendored/divert/include")
+        .include("vendored/divert/dll/")
+        .file("vendored/divert/dll/windivert.c")
+        .warnings(false);
 
-    std::env::set("CFLAGS", "-shared -O2 -Iinclude -Wl,--enable-stdcall-fixup -Wl,--entry=_WinDivertDllEntry")
+    cfg.compile("windivert");
 
-    cc::Build::new()
-        .file("./bundled/src/dll/windivert.c")
-        .file("./bundled/src/dll/windivert_helper.c")
-        .compile("WinDivert")
-
-    // set_link_directives();
+    set_link_directives();
 }
 
 fn set_link_directives() {
-    let kind = if env::var("WINDIVERT_DYNAMIC").is_ok() {
-        "dylib"
-    } else {
-        "static"
-    }
+    // required by windivert
+    println!("cargo:rustc-link-lib=advapi32");
+    println!("cargo:rustc-link-lib=setupapi");
+    println!("cargo:rustc-link-lib=user32");
+    println!("cargo:rustc-link-lib=kernel32");
+    println!("cargo:rustc-link-lib=ws2_32");
 
-    println!("cargo:rustc-link-lib={}=WinDivert", kind);
+    // statically link the vendored windivert
+    println!("cargo:rustc-link-lib=static=windivert");
 }

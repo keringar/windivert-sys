@@ -1,7 +1,9 @@
-# WinDivert 1.4.3
+# Bindings for WinDivert 1.4.3
 
-Includes bundled sources and precompiled driver files for WinDivert 1.4.3-B.
-Static linking by default, to dynamically link instead, set WINDIVERT_DYNAMIC to some value.
-If WINDIVERT_DYNAMIC is not present, windivert is staticly linked.
+Includes bundled sources and precompiled signed driver files from WinDivert 1.4.3-B.
+Statically links windivert. Documentation located here: https://reqrypt.org/windivert-doc.html.
+Examples must be run as an admin in order to load the filter driver, in addition, the driver
+SYS files must be placed in the same directory as the executable, placing the driver files
+in the current working directory will not work.
 
 This library is a no-op on non-windows platforms.
